@@ -1,0 +1,270 @@
+# -*- coding: utf-8 -*-
+from PyQt4.QtGui import *
+from PyQt4.QtCore import *
+import sys
+
+QTextCodec.setCodecForTr(QTextCodec.codecForName("utf8"))
+
+class MainWidget(QMainWindow):
+    def __init__(self,parent=None):
+        super(MainWidget,self).__init__(parent)
+        self.setWindowTitle(self.tr("多文档窗口"))
+        self.workSpace=QWorkspace()
+        self.setCentralWidget(self.workSpace)
+
+        window1=AnalogInfo(self.tr("窗口1"))
+        # window1.setWindowTitle(self.tr("窗口1"))
+        # edit1=QTextEdit(self.tr("子窗口1"))
+        # window1.setCentralWidget(edit1)
+        window2=QMainWindow()
+        window2.setWindowTitle(self.tr("窗口2"))
+        edit2=QTextEdit(self.tr("子窗口2"))
+        window2.setCentralWidget(edit2)
+        window3=QMainWindow()
+        window3.setWindowTitle(self.tr("窗口3"))
+        edit3=QTextEdit(self.tr("子窗口3"))
+        window3.setCentralWidget(edit3)
+
+        self.workSpace.addWindow(window1)
+        self.workSpace.addWindow(window2)
+        self.workSpace.addWindow(window3)
+
+        self.createMenu()
+        self.slotScroll()
+
+    def createMenu(self):
+        layoutMenu=self.menuBar().addMenu(self.tr("布局"))
+        arrange=QAction(self.tr("排列图标"),self)
+        self.connect(arrange,SIGNAL("triggered()"),self.workSpace,SLOT("arrangeIcons()"))
+        layoutMenu.addAction(arrange)
+
+        tile=QAction(self.tr("平铺"),self)
+        self.connect(tile,SIGNAL("triggered()"),self.workSpace,SLOT("tile()"))
+        layoutMenu.addAction(tile)
+
+        cascade=QAction(self.tr("层叠"),self)
+        self.connect(cascade,SIGNAL("triggered()"),self.workSpace,SLOT("cascade()"))
+        layoutMenu.addAction(cascade)
+
+        otherMenu=self.menuBar().addMenu(self.tr("其它"))
+        scrollAct=QAction(self.tr("滚动"),self)
+        self.connect(scrollAct,SIGNAL("triggered()"),self.slotScroll)
+        otherMenu.addAction(scrollAct)
+        otherMenu.addSeparator()
+
+        nextAct=QAction(self.tr("下一个"),self)
+        self.connect(nextAct,SIGNAL("triggered()"),self.workSpace,SLOT("activateNextWindow()"))
+        otherMenu.addAction(nextAct)
+
+        previousAct=QAction(self.tr("上一个"),self)
+        self.connect(previousAct,SIGNAL("triggered()"),self.workSpace,SLOT("activatePreviousWindow()"))
+        otherMenu.addAction(previousAct)
+
+    def slotScroll(self):
+        self.workSpace.setScrollBarsEnabled(not self.workSpace.scrollBarsEnabled())
+
+class AnalogInfo(QMainWindow):
+    def __init__(self, title, parent = None):
+        super(AnalogInfo,self).__init__(parent)
+
+        self.setWindowTitle(title)
+
+        # 建立基本元素
+        label1=QLabel(self.tr("Uab1(V)"))
+        label2=QLabel(self.tr("Ucb1(V)"))
+        label3=QLabel(self.tr("Uab2(V)"))
+        label4=QLabel(self.tr("Ucb2(V)"))
+
+        label5=QLabel(self.tr("Ia1(A)"))
+        label6=QLabel(self.tr("Ib1(A)"))
+        label7=QLabel(self.tr("Ic1(A)"))
+        label8=QLabel(self.tr("Ia2(A)"))
+        label9=QLabel(self.tr("Ib2(A)"))
+        label10=QLabel(self.tr("Ic2(A)"))
+        label11=QLabel(self.tr("Ia3(A)"))
+        label12=QLabel(self.tr("Ib3(A)"))
+        label13=QLabel(self.tr("Ic3(A)"))
+        label14=QLabel(self.tr("Ia4(A)"))
+        label15=QLabel(self.tr("Ib4(A)"))
+        label16=QLabel(self.tr("Ic4(A)"))
+
+        label17=QLabel(self.tr("P1(Var)"))
+        label18=QLabel(self.tr("Q1(W)"))
+        label19=QLabel(self.tr("P2(Var)"))
+        label20=QLabel(self.tr("Q2(W)"))
+        label21=QLabel(self.tr("P3(Var)"))
+        label22=QLabel(self.tr("Q3(W)"))
+        label23=QLabel(self.tr("P4(Var)"))
+        label24=QLabel(self.tr("Q4(W)"))
+
+        label25=QLabel(self.tr("COS1"))
+        label26=QLabel(self.tr("COS2"))
+        label27=QLabel(self.tr("COS3"))
+        label28=QLabel(self.tr("COS4"))
+
+        label29=QLabel(self.tr("S1"))
+        label30=QLabel(self.tr("S2"))
+        label31=QLabel(self.tr("S3"))
+        label32=QLabel(self.tr("S4"))
+
+        # 电压
+        self.Label1=QLabel("00.000")
+        self.Label1.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+        self.Label2=QLabel("00.000")
+        self.Label2.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+        self.Label3=QLabel("00.000")
+        self.Label3.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+        self.Label4=QLabel("00.000")
+        self.Label4.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+
+        # 电流
+        self.Label5=QLabel("00.000")
+        self.Label5.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+        self.Label6=QLabel("00.000")
+        self.Label6.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+        self.Label7=QLabel("00.000")
+        self.Label7.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+        self.Label8=QLabel("00.000")
+        self.Label8.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+        self.Label9=QLabel("00.000")
+        self.Label9.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+        self.Label10=QLabel("00.000")
+        self.Label10.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+        self.Label11=QLabel("00.000")
+        self.Label11.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+        self.Label12=QLabel("00.000")
+        self.Label12.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+        self.Label13=QLabel("00.000")
+        self.Label13.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+        self.Label14=QLabel("00.000")
+        self.Label14.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+        self.Label15=QLabel("00.000")
+        self.Label15.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+        self.Label16=QLabel("00.000")
+        self.Label16.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+
+        # 功率
+        self.Label17=QLabel("0000.00")
+        self.Label17.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+        self.Label18=QLabel("0000.00")
+        self.Label18.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+        self.Label19=QLabel("0000.00")
+        self.Label19.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+        self.Label20=QLabel("0000.00")
+        self.Label20.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+        self.Label21=QLabel("0000.00")
+        self.Label21.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+        self.Label22=QLabel("0000.00")
+        self.Label22.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+        self.Label23=QLabel("0000.00")
+        self.Label23.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+        self.Label24=QLabel("0000.00")
+        self.Label24.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+
+        # COS
+        self.Label25=QLabel("0.000")
+        self.Label25.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+        self.Label26=QLabel("0.000")
+        self.Label26.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+        self.Label27=QLabel("0.000")
+        self.Label27.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+        self.Label28=QLabel("0.000")
+        self.Label28.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+
+        # S
+        self.Label29=QLabel("0000.00")
+        self.Label29.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+        self.Label30=QLabel("0000.00")
+        self.Label30.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+        self.Label31=QLabel("0000.00")
+        self.Label31.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+        self.Label32=QLabel("0000.00")
+        self.Label32.setFrameStyle(QFrame.Panel|QFrame.Sunken)
+
+        self.content = QWidget(self)
+        self.group = QGroupBox("遥测信息")
+        layout=QGridLayout(self.group)
+
+        layout.addWidget(label1,0,0)
+        layout.addWidget(self.Label1,0,1)
+        layout.addWidget(label2,0,2)
+        layout.addWidget(self.Label2,0,3)
+        layout.addWidget(label3,0,4)
+        layout.addWidget(self.Label3,0,5)
+        layout.addWidget(label4,0,6)
+        layout.addWidget(self.Label4,0,7)
+
+        layout.addWidget(label5,1,0)
+        layout.addWidget(self.Label5,1,1)
+        layout.addWidget(label6,1,2)
+        layout.addWidget(self.Label6,1,3)
+        layout.addWidget(label7,1,4)
+        layout.addWidget(self.Label7,1,5)
+
+        layout.addWidget(label8,2,0)
+        layout.addWidget(self.Label8,2,1)
+        layout.addWidget(label9,2,2)
+        layout.addWidget(self.Label9,2,3)
+        layout.addWidget(label10,2,4)
+        layout.addWidget(self.Label10,2,5)
+
+        layout.addWidget(label11,3,0)
+        layout.addWidget(self.Label11,3,1)
+        layout.addWidget(label12,3,2)
+        layout.addWidget(self.Label12,3,3)
+        layout.addWidget(label13,3,4)
+        layout.addWidget(self.Label13,3,5)
+
+        layout.addWidget(label14,4,0)
+        layout.addWidget(self.Label14,4,1)
+        layout.addWidget(label15,4,2)
+        layout.addWidget(self.Label15,4,3)
+        layout.addWidget(label16,4,4)
+        layout.addWidget(self.Label16,4,5)
+
+        layout.addWidget(label17,5,0)
+        layout.addWidget(self.Label17,5,1)
+        layout.addWidget(label19,5,2)
+        layout.addWidget(self.Label19,5,3)
+        layout.addWidget(label21,5,4)
+        layout.addWidget(self.Label21,5,5)
+        layout.addWidget(label23,5,6)
+        layout.addWidget(self.Label23,5,7)
+
+        layout.addWidget(label18,6,0)
+        layout.addWidget(self.Label18,6,1)
+        layout.addWidget(label20,6,2)
+        layout.addWidget(self.Label20,6,3)
+        layout.addWidget(label22,6,4)
+        layout.addWidget(self.Label22,6,5)
+        layout.addWidget(label24,6,6)
+        layout.addWidget(self.Label24,6,7)
+
+        layout.addWidget(label25,7,0)
+        layout.addWidget(self.Label25,7,1)
+        layout.addWidget(label26,7,2)
+        layout.addWidget(self.Label26,7,3)
+        layout.addWidget(label27,7,4)
+        layout.addWidget(self.Label27,7,5)
+        layout.addWidget(label28,7,6)
+        layout.addWidget(self.Label28,7,7)
+
+        layout.addWidget(label29,8,0)
+        layout.addWidget(self.Label29,8,1)
+        layout.addWidget(label30,8,2)
+        layout.addWidget(self.Label30,8,3)
+        layout.addWidget(label31,8,4)
+        layout.addWidget(self.Label31,8,5)
+        layout.addWidget(label32,8,6)
+        layout.addWidget(self.Label32,8,7)
+
+        layout.setMargin(15)
+        layout.setSpacing(15)
+        layout.setSizeConstraint(QLayout.SetFixedSize)
+
+        # self.setWidget(self.group)
+
+app=QApplication(sys.argv)
+main=MainWidget()
+main.show()
+app.exec_()
